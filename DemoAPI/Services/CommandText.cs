@@ -17,7 +17,7 @@
         public string RemoveBus => "Delete From Bus Where VehicleId= @VehicleId";
         public string LastAddedVehicle => "Select top 1* From Vehicles order by VehicleId desc";
         
-        public string RegisterUser => "Insert Into Users (Username,Name, Email,Role,Password) SELECT Username, Name, Email,Role,Password FROM @DataTable";
+        public string RegisterUser => "Insert Into Users (Username,Name, Email,Role,Password) Values (@Username, @Name, @Email,@Role,@Password)";
 
         public string GetUsers => "Select * from Users";
     }

@@ -47,7 +47,7 @@ namespace DemoAPI.Controllers
 
             // Get a range with the remainder of the worksheet data (the range used)
             var range = ws.Range(firstPossibleAddress, lastPossibleAddress).AsRange(); //.RangeUsed();
-                                                                                              // Treat the range as a table (to be able to use the column names)
+                                                                                       // Treat the range as a table (to be able to use the column names)
             var table = range.AsTable();
 
             //Specify what are all the Columns you need to get from Excel
@@ -146,10 +146,23 @@ namespace DemoAPI.Controllers
             //     categoryRow = categoryRow.RowBelow();
             // }
             DataTable dataTable = ConvertListToDataTable(dataList);
-            //IList<User> users = JsonSerializer.Deserialize<User>(dataList);
+            List<User> users = new List<User>();
+            for (int i = 0; i < dataTable.Rows.Count; i++)
+            {
 
-            await _userServices.AddUser(dataTable);
+                users.Add(new Models.User
+                {
+                    UserName = dataTable.Rows[i].Field<string>("UserName"),
+                    Name = dataTable.Rows[i].Field<string>("Name"),
+                    Email = dataTable.Rows[i].Field<string>("Email"),
+                    Password = dataTable.Rows[i].Field<string>("Password"),
+                    Role = dataTable.Rows[i].Field<string>("Role"),
+                  
+                });
+            }
+            await _userServices.AddUser(users);
             return Ok();
+            
         }
         private static DataTable ConvertListToDataTable(IReadOnlyList<string[]> list)
         {

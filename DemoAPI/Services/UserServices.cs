@@ -18,7 +18,7 @@ namespace DemoAPI.Services
         }
 
 
-        public Task AddUser(DataTable dataTable)
+        public Task AddUser(IList<User> entity)
         {
             return WithConnection(async conn =>
             {
@@ -27,15 +27,17 @@ namespace DemoAPI.Services
 
                     try
                     {
-                      
+
+                        foreach (var user in entity)
+                        {
+
+                            var hashPassword = BC.HashPassword(user.Password);
 
 
-                            
-
-                            await conn.ExecuteAsync(_commandText.RegisterUser, new { DataTable = dataTable.AsTableValuedParameter("DataTable") }, transaction: tran
+                            await conn.ExecuteAsync(_commandText.RegisterUser, new { UserName =user.UserName, Name= user.Name, Email= user.Email, Password= hashPassword, Role = user.Role }, transaction: tran
                             );
 
-                        
+                        } 
 
                         tran.Commit();
                     }

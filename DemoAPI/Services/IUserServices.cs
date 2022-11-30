@@ -10,6 +10,6 @@ namespace DemoAPI.Services
     {
         
         Task<IEnumerable<User>> GetUserList();
-        Task AddUser(DataTable dataTable);
+        Task AddUser(IList<User> entity);
     }
 }
